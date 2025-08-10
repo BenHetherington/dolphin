@@ -431,6 +431,9 @@ void MemoryWidget::LoadSettings()
 
   m_display_combo->setCurrentIndex(display_index);
 
+  const bool dual_view = settings.value(QStringLiteral("memorywidget/dual_view"), false).toBool();
+  m_dual_check->setChecked(dual_view);
+
   bool bp_rw = settings.value(QStringLiteral("memorywidget/bpreadwrite"), true).toBool();
   bool bp_r = settings.value(QStringLiteral("memorywidget/bpread"), false).toBool();
   bool bp_w = settings.value(QStringLiteral("memorywidget/bpwrite"), false).toBool();
@@ -463,6 +466,7 @@ void MemoryWidget::SaveSettings()
                     m_address_space_physical->isChecked());
 
   settings.setValue(QStringLiteral("memorywidget/display_type"), m_display_combo->currentIndex());
+  settings.setValue(QStringLiteral("memorywidget/dual_view"), m_dual_check->isChecked());
 
   settings.setValue(QStringLiteral("memorywidget/bpreadwrite"), m_bp_read_write->isChecked());
   settings.setValue(QStringLiteral("memorywidget/bpread"), m_bp_read_only->isChecked());
