@@ -177,11 +177,11 @@ struct EffectiveAddressSpaceAccessors : Accessors
     // For forward=true, search incrementally (step +1) until it wraps back to 0x00000000
     // For forward=false, search decrementally (step -1) until it wraps back to 0xfffff000
     // Any page that doesn't translate is completely skipped.
-    const u32 haystack_page_limit = forward ? 0x00000000 : 0xfffff000;
+    const u32 haystack_page_limit = forward ? 0x81800000 : 0x7FFFF000;
     const u32 haystack_offset_limit = forward ? 0x000 : 0xfff;
     const u32 haystack_page_change = forward ? 0x1000 : -0x1000;
     const u32 haystack_offset_change = forward ? 1 : -1;
-    do
+    while ((haystack_address & 0xfffff000) != haystack_page_limit)
     {
       if (PowerPC::MMU::HostIsRAMAddress(guard, haystack_address))
       {
@@ -198,7 +198,7 @@ struct EffectiveAddressSpaceAccessors : Accessors
       {
         haystack_address = (haystack_address + haystack_page_change) & 0xfffff000;
       }
-    } while ((haystack_address & 0xfffff000) != haystack_page_limit);
+    }
     return std::nullopt;
   }
 };
