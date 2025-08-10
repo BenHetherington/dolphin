@@ -188,7 +188,7 @@ private:
   bool NetPlayHost(const UICommon::GameFile& game);
   void NetPlayQuit();
 
-  void OnBootGameCubeIPL(DiscIO::Region region);
+  void OnBootGameCubeIPL(DiscIO::Region region, const std::string& filename);
   void OnImportNANDBackup();
   void OnConnectWiiRemote(int id);
 

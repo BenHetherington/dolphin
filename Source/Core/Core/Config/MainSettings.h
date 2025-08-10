@@ -376,6 +376,8 @@ const char* GetDirectoryForRegion(DiscIO::Region region,
                                   RegionDirectoryStyle style = RegionDirectoryStyle::Legacy);
 
 std::string GetBootROMPath(const std::string& region_directory);
+std::string GetBootROMPath(const std::string& region_directory, const std::string& filename);
+
 // Builds the memory card according to the configuration with the given region and size. If the
 // given region is std::nullopt, the region in the configured path is used if there is one, or the
 // fallback region otherwise.

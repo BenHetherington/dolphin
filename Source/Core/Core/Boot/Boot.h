@@ -127,9 +127,11 @@ struct BootParameters
   struct IPL
   {
     explicit IPL(DiscIO::Region region_);
+    IPL(DiscIO::Region region_, const std::string& filename);
     IPL(DiscIO::Region region_, Disc&& disc_);
     std::string path;
     DiscIO::Region region;
+    std::string filename;
     // It is possible to boot the IPL with a disc inserted (with "skip IPL" disabled).
     std::optional<Disc> disc;
   };

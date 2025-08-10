@@ -391,6 +391,7 @@ struct SetGameMetadata
   {
     *region = ipl.region;
     system.SetIsWii(false);
+    config->m_debugger_game_id = "ipl_" + ipl.filename;
     Host_TitleChanged();
 
     return true;
@@ -428,7 +429,11 @@ bool SConfig::SetPathsAndGameMetadata(Core::System& system, const BootParameters
   // Set up paths
   const std::string region_dir = Config::GetDirectoryForRegion(Config::ToGameCubeRegion(m_region));
   m_strSRAM = File::GetUserPath(F_GCSRAM_IDX);
-  m_strBootROM = Config::GetBootROMPath(region_dir);
+  if (const BootParameters::IPL* iplParams = std::get_if<BootParameters::IPL>(&boot.parameters)) {
+    m_strBootROM = iplParams->path;
+  } else {
+    m_strBootROM = Config::GetBootROMPath(region_dir);
+  }
 
   return true;
 }

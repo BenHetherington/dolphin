@@ -1764,9 +1764,9 @@ QSize MainWindow::sizeHint() const
   return QSize(800, 600);
 }
 
-void MainWindow::OnBootGameCubeIPL(DiscIO::Region region)
+void MainWindow::OnBootGameCubeIPL(DiscIO::Region region, const std::string& filename)
 {
-  StartGame(std::make_unique<BootParameters>(BootParameters::IPL{region}));
+  StartGame(std::make_unique<BootParameters>(BootParameters::IPL{region, filename}));
 }
 
 void MainWindow::OnImportNANDBackup()

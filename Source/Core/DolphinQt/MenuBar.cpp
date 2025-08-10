@@ -291,12 +291,41 @@ void MenuBar::AddToolsMenu()
 
   QMenu* gc_ipl = tools_menu->addMenu(tr("Load GameCube Main Menu"));
 
-  m_ntscj_ipl = gc_ipl->addAction(tr("NTSC-J"), this,
-                                  [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_J); });
-  m_ntscu_ipl = gc_ipl->addAction(tr("NTSC-U"), this,
-                                  [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_U); });
-  m_pal_ipl =
-      gc_ipl->addAction(tr("PAL"), this, [this] { emit BootGameCubeIPL(DiscIO::Region::PAL); });
+  m_ntscj_ipl = gc_ipl->addMenu(tr("NTSC-J"));
+  m_ntscu_ipl = gc_ipl->addMenu(tr("NTSC-U"));
+  m_pal_ipl = gc_ipl->addMenu(tr("PAL"));
+
+  m_ntscj_ipl->addAction(tr("NTSC 1.0"), this,
+                         [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_J, "gc-ntsc-10"); });
+  m_ntscj_ipl->addAction(tr("NTSC 1.1"), this,
+                         [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_J, "gc-ntsc-11"); });
+  m_ntscj_ipl->addAction(tr("NTSC 1.2 (DOL-001)"), this,
+                         [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_J, "gc-ntsc-12-001"); });
+  m_ntscj_ipl->addAction(tr("NTSC 1.2 (DOL-101)"), this,
+                         [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_J, "gc-ntsc-12-101"); });
+
+  m_ntscu_ipl->addAction(tr("NTSC 1.0"), this,
+                         [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_U, "gc-ntsc-10"); });
+  m_ntscu_ipl->addAction(tr("NTSC 1.1"), this,
+                         [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_U, "gc-ntsc-11"); });
+  m_ntscu_ipl->addAction(tr("NTSC 1.2 (DOL-001)"), this,
+                         [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_U, "gc-ntsc-12-001"); });
+  m_ntscu_ipl->addAction(tr("NTSC 1.2 (DOL-101)"), this,
+                         [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_U, "gc-ntsc-12-101"); });
+
+  m_pal_ipl->addAction(tr("PAL 1.0"), this,
+                       [this] { emit BootGameCubeIPL(DiscIO::Region::PAL, "gc-pal-10"); });
+  m_pal_ipl->addAction(tr("MPAL 1.1 (Brazil)"), this,
+                       [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_U, "gc-pal-11"); });
+  m_pal_ipl->addAction(tr("PAL 1.2"), this,
+                       [this] { emit BootGameCubeIPL(DiscIO::Region::PAL, "gc-pal-12"); });
+
+  // m_ntscj_ipl = gc_ipl->addAction(tr("NTSC-J"), this,
+  //                                 [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_J); });
+  // m_ntscu_ipl = gc_ipl->addAction(tr("NTSC-U"), this,
+  //                                 [this] { emit BootGameCubeIPL(DiscIO::Region::NTSC_U); });
+  // m_pal_ipl =
+  //     gc_ipl->addAction(tr("PAL"), this, [this] { emit BootGameCubeIPL(DiscIO::Region::PAL); });
 
   tools_menu->addAction(tr("Memory Card Manager"), this, [this] { emit ShowMemcardManager(); });
 
@@ -1079,9 +1108,9 @@ void MenuBar::UpdateToolsMenu(const Core::State state)
 
   m_boot_sysmenu->setEnabled(is_uninitialized);
   m_perform_online_update_menu->setEnabled(is_uninitialized);
-  m_ntscj_ipl->setEnabled(is_uninitialized && File::Exists(Config::GetBootROMPath(JAP_DIR)));
-  m_ntscu_ipl->setEnabled(is_uninitialized && File::Exists(Config::GetBootROMPath(USA_DIR)));
-  m_pal_ipl->setEnabled(is_uninitialized && File::Exists(Config::GetBootROMPath(EUR_DIR)));
+  m_ntscj_ipl->setEnabled(is_uninitialized /*&& File::Exists(Config::GetBootROMPath(JAP_DIR))*/);
+  m_ntscu_ipl->setEnabled(is_uninitialized /*&& File::Exists(Config::GetBootROMPath(USA_DIR))*/);
+  m_pal_ipl->setEnabled(is_uninitialized /*&& File::Exists(Config::GetBootROMPath(EUR_DIR))*/);
   m_wad_install_action->setEnabled(is_uninitialized);
   m_import_backup->setEnabled(is_uninitialized);
   m_check_nand->setEnabled(is_uninitialized);

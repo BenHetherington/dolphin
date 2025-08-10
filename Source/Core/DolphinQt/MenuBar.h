@@ -84,7 +84,7 @@ signals:
 
   // Tools
   void ShowMemcardManager();
-  void BootGameCubeIPL(DiscIO::Region region);
+  void BootGameCubeIPL(DiscIO::Region region, const std::string& filename);
   void ShowFIFOPlayer();
   void ShowAboutDialog();
   void ShowCheatsManager();
@@ -205,9 +205,9 @@ private:
   QAction* m_wad_install_action;
   QMenu* m_perform_online_update_menu;
   QAction* m_perform_online_update_for_current_region;
-  QAction* m_ntscj_ipl;
-  QAction* m_ntscu_ipl;
-  QAction* m_pal_ipl;
+  QMenu* m_ntscj_ipl;
+  QMenu* m_ntscu_ipl;
+  QMenu* m_pal_ipl;
   QMenu* m_manage_nand_menu;
   QAction* m_import_backup;
   QAction* m_check_nand;

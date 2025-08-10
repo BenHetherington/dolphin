@@ -309,6 +309,12 @@ BootParameters::IPL::IPL(DiscIO::Region region_) : region(region_)
   path = Config::GetBootROMPath(directory);
 }
 
+BootParameters::IPL::IPL(DiscIO::Region region_, const std::string& filename_) : region(region_), filename(filename_)
+{
+  const std::string directory = Config::GetDirectoryForRegion(region);
+  path = Config::GetBootROMPath(directory, filename);
+}
+
 BootParameters::IPL::IPL(DiscIO::Region region_, Disc&& disc_) : IPL(region_)
 {
   disc = std::move(disc_);
