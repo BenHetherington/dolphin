@@ -346,10 +346,21 @@ void CodeViewWidget::Update(const Core::CPUThreadGuard* guard)
     auto* description_item = new QTableWidgetItem(desc_formatted);
     auto* branch_item = new QTableWidgetItem();
 
+    // QColor description_colour = description_item->foreground().color();
+    // description_colour.setAlphaF(description_colour.alphaF() * 0.7);
+    description_item->setForeground(QColor(255, 255, 255, 192));
+
+    const auto patchedColour = QColor(255, 165, 0);
+    const auto patchedAlphaColour = QColor(255, 165, 0, 192);
+
     for (auto* item : {bp_item, addr_item, ins_item, param_item, description_item, branch_item})
     {
       item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
       item->setData(Qt::UserRole, addr);
+
+      if (debug_interface.HasEnabledPatch(addr)) {
+        item->setForeground(item != description_item ? patchedColour : patchedAlphaColour);
+      }
 
       if (addr == pc && item != bp_item)
       {
@@ -378,8 +389,14 @@ void CodeViewWidget::Update(const Core::CPUThreadGuard* guard)
       branch.dst_addr = branch_addr;
       branch.is_link = IsBranchInstructionWithLink(ins);
 
+      const std::string_view branch_description = debug_interface.GetDescription(branch_addr);
       description_item->setText(
-          tr("--> %1").arg(QtUtils::FromStdString(debug_interface.GetDescription(branch_addr))));
+          tr("--> %1").arg(QtUtils::FromStdString(branch_description)));
+
+      const auto descriptionColour = description_item->foreground().color();
+      if (descriptionColour != Qt::black && branch_description != desc) {
+        description_item->setForeground(descriptionColour == patchedAlphaColour ? patchedColour : QColor(255, 255, 255, 255));
+      }
       param_item->setForeground(dark_theme ? QColor(255, 135, 255) : Qt::magenta);
     }
 
