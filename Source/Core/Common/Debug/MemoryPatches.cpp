@@ -25,6 +25,7 @@ MemoryPatches::~MemoryPatches() = default;
 
 void MemoryPatches::SetPatch(const Core::CPUThreadGuard& guard, u32 address, u32 value)
 {
+  UnsetPatch(guard, address);
   const std::size_t index = m_patches.size();
   m_patches.emplace_back(address, value);
   Patch(guard, index);
@@ -40,6 +41,7 @@ void MemoryPatches::SetPatch(const Core::CPUThreadGuard& guard, u32 address, std
 
 void MemoryPatches::SetFramePatch(const Core::CPUThreadGuard& guard, u32 address, u32 value)
 {
+  UnsetPatch(guard, address);
   const std::size_t index = m_patches.size();
   m_patches.emplace_back(address, value);
   m_patches.back().type = MemoryPatch::ApplyType::EachFrame;
