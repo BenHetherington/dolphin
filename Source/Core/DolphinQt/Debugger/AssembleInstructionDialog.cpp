@@ -38,8 +38,8 @@ QString HtmlFormatErrorLine(const Common::GekkoAssembler::AssemblerError& err)
 }
 }  // namespace
 
-AssembleInstructionDialog::AssembleInstructionDialog(QWidget* parent, u32 address, u32 value)
-    : QDialog(parent), m_code(value), m_address(address)
+AssembleInstructionDialog::AssembleInstructionDialog(QWidget* parent, u32 address, u32 value, const std::string& disassembly)
+    : QDialog(parent), m_code(value), m_address(address), m_disassembly(QString::fromStdString(disassembly).replace(QChar::Tabulation, QChar::Space))
 {
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
   setWindowModality(Qt::WindowModal);
@@ -66,7 +66,7 @@ void AssembleInstructionDialog::CreateWidgets()
   layout->addWidget(m_error_line_label);
   layout->addWidget(m_msg_label);
   layout->addWidget(m_button_box);
-  m_input_edit->setText(QStringLiteral(".4byte 0x%1").arg(m_code, 8, 16, QLatin1Char('0')));
+  m_input_edit->setText(m_disassembly);
 
   setLayout(layout);
   OnEditChanged();

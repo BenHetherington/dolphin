@@ -1030,7 +1030,7 @@ void CodeViewWidget::DoPatchInstruction(bool assemble)
 
   if (assemble)
   {
-    AssembleInstructionDialog dialog(this, addr, debug_interface.ReadInstruction(guard, addr));
+    AssembleInstructionDialog dialog(this, addr, debug_interface.ReadInstruction(guard, addr), debug_interface.Disassemble(&guard, addr));
     SetQWidgetWindowDecorations(&dialog);
     if (dialog.exec() == QDialog::Accepted)
     {
