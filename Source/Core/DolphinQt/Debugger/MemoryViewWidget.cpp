@@ -102,7 +102,7 @@ public:
   {
     QTableWidget::resizeEvent(event);
     // Remakes table if vertically resized
-    const int rows = std::round((height() / static_cast<float>(rowHeight(0))) - 0.25);
+    const int rows = std::round((height() / static_cast<float>(rowHeight(0))) - 0.25) + 2;
     if (rows != rowCount())
       m_view->UpdateDispatcher(MemoryViewWidget::UpdateType::Full);
   }
@@ -137,14 +137,33 @@ public:
 
   void wheelEvent(QWheelEvent* event) override
   {
-    auto delta =
-        -static_cast<int>(std::round((event->angleDelta().y() / (SCROLL_FRACTION_DEGREES * 8))));
+    int pixelDeltaY = 0;
+    int delta = 0;
 
-    if (delta == 0)
-      return;
+    if (!event->pixelDelta().isNull()) {
+      pixelDeltaY = event->pixelDelta().y();
+      horizontalScrollBar()->setValue(horizontalScrollBar()->value() - event->pixelDelta().x());
 
-    m_view->m_address += delta * m_view->m_bytes_per_row;
-    m_view->UpdateDispatcher(MemoryViewWidget::UpdateType::Addresses);
+      // TODO: This doesn't work when scrolling up
+      int intendedNewScrollPosition = verticalScrollBar()->value() - pixelDeltaY;
+
+      int height = rowHeight(0);
+      delta = intendedNewScrollPosition >= 0 ? (intendedNewScrollPosition / height) : ((intendedNewScrollPosition - (height - 1)) / height);
+      pixelDeltaY += height * delta;
+
+    } else {
+      delta =
+          -static_cast<int>(std::round((event->angleDelta().y() / (SCROLL_FRACTION_DEGREES * 8))));
+    }
+
+    if (delta != 0) {
+      m_view->m_address += delta * m_view->m_bytes_per_row;
+      m_view->UpdateDispatcher(MemoryViewWidget::UpdateType::Addresses);
+    }
+
+    if (pixelDeltaY != 0) {
+      verticalScrollBar()->setValue(verticalScrollBar()->value() - pixelDeltaY);
+    }
   }
 
   void mousePressEvent(QMouseEvent* event) override
@@ -374,7 +393,7 @@ void MemoryViewWidget::CreateTable()
   const int total_columns = MISC_COLUMNS + m_data_columns;
 
   const int rows =
-      std::round((m_table->height() / static_cast<float>(m_table->rowHeight(0))) - 0.25);
+      std::round((m_table->height() / static_cast<float>(m_table->rowHeight(0))) - 0.25) + 2;
 
   m_table->setColumnCount(total_columns);
   m_table->setRowCount(rows);
