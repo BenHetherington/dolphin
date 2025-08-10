@@ -113,7 +113,7 @@ void ToolBar::MakeActions()
   // i18n: Here, PC is an acronym for program counter, not personal computer.
   m_set_pc_action = addAction(tr("Set PC"), this, &ToolBar::SetPCPressed);
 
-  m_open_action = addAction(tr("Open"), this, &ToolBar::OpenPressed);
+  m_open_action = addAction(tr("Mute"), this, &ToolBar::OpenPressed);
   m_refresh_action = addAction(tr("Refresh"), [this] { emit RefreshPressed(); });
   m_refresh_action->setEnabled(false);
 
@@ -178,7 +178,7 @@ void ToolBar::UpdateIcons()
   m_show_pc_action->setIcon(Resources::GetThemeIcon("debugger_show_pc"));
   m_set_pc_action->setIcon(Resources::GetThemeIcon("debugger_set_pc"));
 
-  m_open_action->setIcon(Resources::GetThemeIcon("open"));
+  m_open_action->setIcon(Resources::GetThemeIcon("assembler_assemble"));
   m_refresh_action->setIcon(Resources::GetThemeIcon("refresh"));
 
   const Core::State state = Core::GetState(Core::System::GetInstance());

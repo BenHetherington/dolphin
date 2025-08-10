@@ -125,6 +125,8 @@
 #include "DolphinQt/ToolBar.h"
 #include "DolphinQt/WiiUpdate.h"
 
+#include "AudioCommon/AudioCommon.h"
+
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
 #include "InputCommon/GCAdapter.h"
 
@@ -686,7 +688,7 @@ void MainWindow::ConnectToolBar()
 {
   addToolBar(m_tool_bar);
 
-  connect(m_tool_bar, &ToolBar::OpenPressed, this, &MainWindow::Open);
+  connect(m_tool_bar, &ToolBar::OpenPressed, this, [this]() { AudioCommon::ToggleMuteVolume(m_system); });
   connect(m_tool_bar, &ToolBar::RefreshPressed, this, &MainWindow::RefreshGameList);
 
   connect(m_tool_bar, &ToolBar::PlayPressed, this, [this]() { Play(); });
