@@ -100,7 +100,7 @@ void ToolBar::MakeActions()
 {
   // i18n: Here, "Step" is a verb. This feature is used for
   // going through code step by step.
-  m_step_action = addAction(tr("Step"), this, &ToolBar::StepPressed);
+  m_step_action = addAction(tr("Step In"), this, &ToolBar::StepPressed);
   // i18n: Here, "Step" is a verb. This feature is used for
   // going through code step by step.
   m_step_over_action = addAction(tr("Step Over"), this, &ToolBar::StepOverPressed);
