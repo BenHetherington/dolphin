@@ -212,7 +212,7 @@ static u32 GetBranchFromAddress(const Core::CPUThreadGuard& guard, u32 addr)
 void CodeViewWidget::FontBasedSizing()
 {
   // just text width is too small with some fonts, so increase by a bit
-  constexpr int extra_text_width = 8;
+  constexpr int extra_text_width = 12;
 
   const QFontMetrics fm(font());
 
@@ -299,7 +299,7 @@ void CodeViewWidget::Update(const Core::CPUThreadGuard* guard)
     setRowCount(1);
 
   // Calculate (roughly) how many rows will fit in our table
-  int rows = std::round((height() / static_cast<float>(rowHeight(0))) - 0.25);
+  int rows = std::round((height() / static_cast<float>(rowHeight(0))) - 0.25) + 2;
 
   setRowCount(rows);
 
@@ -1098,14 +1098,33 @@ void CodeViewWidget::keyPressEvent(QKeyEvent* event)
 
 void CodeViewWidget::wheelEvent(QWheelEvent* event)
 {
-  auto delta =
+  int pixelDeltaY = 0;
+  int delta = 0;
+
+  if (!event->pixelDelta().isNull()) {
+    pixelDeltaY = event->pixelDelta().y();
+    horizontalScrollBar()->setValue(horizontalScrollBar()->value() - event->pixelDelta().x());
+
+    // TODO: This doesn't work when scrolling up
+    int intendedNewScrollPosition = verticalScrollBar()->value() - pixelDeltaY;
+
+    int height = rowHeight(0);
+    delta = intendedNewScrollPosition >= 0 ? (intendedNewScrollPosition / height) : ((intendedNewScrollPosition - (height - 1)) / height);
+    pixelDeltaY += height * delta;
+
+  } else {
+    delta =
       -static_cast<int>(std::round((event->angleDelta().y() / (SCROLL_FRACTION_DEGREES * 8))));
+  }
 
-  if (delta == 0)
-    return;
+  if (delta != 0) {
+    m_address += delta * sizeof(u32);
+    Update();
+  }
 
-  m_address += delta * sizeof(u32);
-  Update();
+  if (pixelDeltaY != 0) {
+    verticalScrollBar()->setValue(verticalScrollBar()->value() - pixelDeltaY);
+  }
 }
 
 void CodeViewWidget::mousePressEvent(QMouseEvent* event)
