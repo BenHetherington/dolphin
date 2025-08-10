@@ -968,7 +968,7 @@ bool MainWindow::RequestStop()
                               "may be lost if you stop the current emulation "
                               "before it completes. Force stop?") :
                            tr("Do you want to stop the current emulation?"),
-        QMessageBox::Yes | QMessageBox::No, QMessageBox::NoButton, Qt::ApplicationModal);
+        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes, Qt::ApplicationModal);
 
     // If a user confirmed stopping the emulation, we do not capture the cursor again,
     // even if the render widget will stay alive for a while.
