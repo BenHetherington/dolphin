@@ -640,6 +640,13 @@ void MenuBar::AddOptionsMenu()
   connect(m_boot_to_pause, &QAction::toggled, this,
           [](bool enable) { SConfig::GetInstance().bBootToPause = enable; });
 
+  QAction* reset_patches = options_menu->addAction(tr("Clear Patches"));
+  connect(reset_patches, &QAction::triggered, this, []() {
+    auto& system = Core::System::GetInstance();
+    system.GetPowerPC().GetDebugInterface().ClearPatches(Core::CPUThreadGuard{system});
+    Core::CallOnStateChangedCallbacks(Core::GetState(system));
+  });
+
   m_reset_ignore_panic_handler = options_menu->addAction(tr("Reset Ignore Panic Handler"));
 
   connect(m_reset_ignore_panic_handler, &QAction::triggered, this, []() {
