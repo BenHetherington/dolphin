@@ -242,6 +242,14 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
     DolphinAnalytics::Instance().ReportGameStart();
 }
 
+void SConfig::SetRunningGameMetadataForIPL(const std::string& filename) {
+  std::lock_guard<std::recursive_mutex> lock(m_metadata_lock);
+
+  m_title_name = "IPL";
+  m_title_description = filename;
+  m_debugger_game_id = "ipl_" + filename;
+}
+
 void SConfig::OnESTitleChanged()
 {
   auto& system = Core::System::GetInstance();
@@ -391,7 +399,7 @@ struct SetGameMetadata
   {
     *region = ipl.region;
     system.SetIsWii(false);
-    config->m_debugger_game_id = "ipl_" + ipl.filename;
+    config->SetRunningGameMetadataForIPL(ipl.filename);
     Host_TitleChanged();
 
     return true;

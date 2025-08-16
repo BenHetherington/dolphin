@@ -73,6 +73,7 @@ struct SConfig
   void SetRunningGameMetadata(const DiscIO::Volume& volume, const DiscIO::Partition& partition);
   void SetRunningGameMetadata(const IOS::ES::TMDReader& tmd, DiscIO::Platform platform);
   void SetRunningGameMetadata(const std::string& game_id);
+  void SetRunningGameMetadataForIPL(const std::string& filename);
 
   // Triggered when Dolphin loads a title directly
   // Reloads title-specific map files, patches, etc.
