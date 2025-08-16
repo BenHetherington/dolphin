@@ -81,7 +81,7 @@ void Host_Message(HostMessageID id)
     s_platform->Stop();
 }
 
-void Host_UpdateTitle(const std::string& title)
+void Host_UpdateTitle(const std::string& title, const std::string& path)
 {
   s_platform->SetTitle(title);
 }

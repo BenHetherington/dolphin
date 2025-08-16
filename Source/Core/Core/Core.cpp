@@ -899,7 +899,7 @@ void UpdateTitle(Core::System& system)
       message += " | " + title;
   }
 
-  Host_UpdateTitle(message);
+  Host_UpdateTitle(message, SConfig::GetInstance().GetFilePath());
 }
 
 void Shutdown(Core::System& system)

@@ -250,6 +250,16 @@ void SConfig::SetRunningGameMetadataForIPL(const std::string& filename) {
   m_debugger_game_id = "ipl_" + filename;
 }
 
+std::string SConfig::GetFilePath() const {
+  std::lock_guard<std::recursive_mutex> lock(m_metadata_lock);
+  return m_path;
+}
+
+void SConfig::SetFilePath(std::string path) {
+  std::lock_guard<std::recursive_mutex> lock(m_metadata_lock);
+  m_path = std::move(path);
+}
+
 void SConfig::OnESTitleChanged()
 {
   auto& system = Core::System::GetInstance();
@@ -331,6 +341,7 @@ struct SetGameMetadata
     system.SetIsWii(disc.volume->GetVolumeType() == DiscIO::Platform::WiiDisc);
     config->m_disc_booted_from_game_list = true;
     config->SetRunningGameMetadata(*disc.volume, disc.volume->GetGamePartition());
+    config->SetFilePath(disc.path);
     return true;
   }
 
@@ -338,6 +349,8 @@ struct SetGameMetadata
   {
     if (!executable.reader->IsValid())
       return false;
+
+    config->SetFilePath(executable.path);
 
     *region = DiscIO::Region::Unknown;
     system.SetIsWii(executable.reader->IsWii());
@@ -374,6 +387,7 @@ struct SetGameMetadata
     *region = tmd.GetRegion();
     system.SetIsWii(true);
     config->SetRunningGameMetadata(tmd, DiscIO::Platform::WiiWAD);
+    config->SetFilePath("");
 
     return true;
   }
@@ -391,6 +405,7 @@ struct SetGameMetadata
     *region = tmd.GetRegion();
     system.SetIsWii(true);
     config->SetRunningGameMetadata(tmd, DiscIO::Platform::WiiWAD);
+    config->SetFilePath("");
 
     return true;
   }
@@ -400,6 +415,7 @@ struct SetGameMetadata
     *region = ipl.region;
     system.SetIsWii(false);
     config->SetRunningGameMetadataForIPL(ipl.filename);
+    config->SetFilePath(ipl.path);
     Host_TitleChanged();
 
     return true;
@@ -414,6 +430,8 @@ struct SetGameMetadata
     *region = DiscIO::Region::NTSC_U;
     system.SetIsWii(dff_file->GetIsWii());
     Host_TitleChanged();
+
+    config->SetFilePath(dff.dff_path);
 
     return true;
   }

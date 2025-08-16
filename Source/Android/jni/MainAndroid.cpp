@@ -131,7 +131,7 @@ void Host_Message(HostMessageID id)
   }
 }
 
-void Host_UpdateTitle(const std::string& title)
+void Host_UpdateTitle(const std::string& title, const std::string& path)
 {
   __android_log_write(ANDROID_LOG_INFO, DOLPHIN_TAG, title.c_str());
 }

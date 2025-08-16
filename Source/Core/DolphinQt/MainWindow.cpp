@@ -1196,6 +1196,7 @@ void MainWindow::ShowRenderWidget()
 
     m_stack->setCurrentIndex(m_stack->addWidget(m_render_widget));
     connect(Host::GetInstance(), &Host::RequestTitle, this, &MainWindow::setWindowTitle);
+    connect(Host::GetInstance(), &Host::RequestPath, this, &MainWindow::setWindowFilePath);
     m_stack->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     m_stack->repaint();
 
@@ -1222,7 +1223,9 @@ void MainWindow::HideRenderWidget(bool reinit, bool is_exit)
     m_rendering_to_main = false;
     m_stack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     disconnect(Host::GetInstance(), &Host::RequestTitle, this, &MainWindow::setWindowTitle);
+    disconnect(Host::GetInstance(), &Host::RequestPath, this, &MainWindow::setWindowFilePath);
     setWindowTitle(QString::fromStdString(Common::GetScmRevStr()));
+    setWindowFilePath(QString());
   }
 
   // The following code works around a driver bug that would lead to Dolphin crashing when changing

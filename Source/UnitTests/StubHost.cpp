@@ -25,7 +25,7 @@ void Host_RefreshDSPDebuggerWindow()
 void Host_Message(HostMessageID)
 {
 }
-void Host_UpdateTitle(const std::string&)
+void Host_UpdateTitle(const std::string&, const std::string&)
 {
 }
 void Host_UpdateDiscordClientID(const std::string& client_id)

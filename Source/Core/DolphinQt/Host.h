@@ -37,6 +37,7 @@ public:
 
 signals:
   void RequestTitle(const QString& title);
+  void RequestPath(const QString& path);
   void RequestStop();
   void RequestRenderSize(int w, int h);
   void UpdateDisasmDialog();

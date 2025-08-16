@@ -64,7 +64,7 @@ void Host_UpdateDisasmDialog();
 void Host_JitCacheInvalidation();
 void Host_JitProfileDataWiped();
 void Host_UpdateMainFrame();
-void Host_UpdateTitle(const std::string& title);
+void Host_UpdateTitle(const std::string& title, const std::string& path);
 void Host_YieldToUI();
 void Host_TitleChanged();
 

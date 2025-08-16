@@ -42,7 +42,7 @@ void Host_Message(HostMessageID id)
 {
 }
 
-void Host_UpdateTitle(const std::string& title)
+void Host_UpdateTitle(const std::string& title, const std::string& path)
 {
 }
 

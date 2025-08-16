@@ -75,6 +75,9 @@ struct SConfig
   void SetRunningGameMetadata(const std::string& game_id);
   void SetRunningGameMetadataForIPL(const std::string& filename);
 
+  std::string GetFilePath() const;
+  void SetFilePath(std::string path);
+
   // Triggered when Dolphin loads a title directly
   // Reloads title-specific map files, patches, etc.
   static void OnTitleDirectlyBooted(const Core::CPUThreadGuard& guard);
@@ -133,4 +136,5 @@ private:
   std::string m_title_description;
   u64 m_title_id;
   u16 m_revision;
+  std::string m_path;
 };
