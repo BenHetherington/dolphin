@@ -148,6 +148,7 @@ CodeViewWidget::CodeViewWidget()
   setContextMenuPolicy(Qt::CustomContextMenu);
   setSelectionMode(QAbstractItemView::SingleSelection);
   setSelectionBehavior(QAbstractItemView::SelectRows);
+  setWordWrap(false);
 
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -335,11 +336,14 @@ void CodeViewWidget::Update(const Core::CPUThreadGuard* guard)
 
     // Adds whitespace and a minimum size to ins and param. Helps to prevent frequent resizing while
     // scrolling.
-    const QString ins_formatted =
-        QStringLiteral("%1").arg(QString::fromStdString(ins), -7, QLatin1Char(' '));
-    const QString param_formatted =
-        QStringLiteral("%1").arg(QString::fromStdString(param), -19, QLatin1Char(' '));
-    const QString desc_formatted = QStringLiteral("%1   ").arg(QtUtils::FromStdString(desc));
+    // const QString ins_formatted =
+    //     QStringLiteral("%1").arg(QString::fromStdString(ins), -7, QLatin1Char(' '));
+    // const QString param_formatted =
+    //     QStringLiteral("%1").arg(QString::fromStdString(param), -19, QLatin1Char(' '));
+    // const QString desc_formatted = QStringLiteral("%1   ").arg(QtUtils::FromStdString(desc));
+    const QString ins_formatted = QString::fromStdString(ins);
+    const QString param_formatted = QString::fromStdString(param);
+    const QString desc_formatted = QtUtils::FromStdString(desc);
 
     auto* ins_item = new QTableWidgetItem(ins_formatted);
     auto* param_item = new QTableWidgetItem(param_formatted);
