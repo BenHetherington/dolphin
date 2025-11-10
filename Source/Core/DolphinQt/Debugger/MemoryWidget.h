@@ -65,6 +65,7 @@ private:
 
   void OnSetValue();
   void OnSetValueFromFile();
+  void OnLoadDolElfFile();
 
   void OnDumpMRAM();
   void OnDumpExRAM();

@@ -29,6 +29,9 @@
 #include "Common/BitUtils.h"
 #include "Common/FileUtil.h"
 #include "Common/IOFile.h"
+
+#include "Core/Boot/DolReader.h"
+#include "Core/Boot/ElfReader.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
 #include "Core/HW/AddressSpace.h"
@@ -260,6 +263,8 @@ void MemoryWidget::CreateWidgets()
   QMenu* menu_import = new QMenu(tr("&Import"), menubar);
   menu_import->addAction(tr("&Load file to current address"), this,
                          &MemoryWidget::OnSetValueFromFile);
+  menu_import->addAction(tr("&Load DOL/ELF"), this,
+                         &MemoryWidget::OnLoadDolElfFile);
   menubar->addMenu(menu_import);
 
   auto* auto_update_action =
@@ -781,6 +786,52 @@ void MemoryWidget::OnSetValueFromFile()
 
   for (u8 b : file_contents)
     accessors->WriteU8(guard, target_addr.address++, b);
+
+  Update();
+}
+
+void MemoryWidget::OnLoadDolElfFile() {
+  if (!Core::IsRunning(m_system))
+    return;
+
+  QString path = QFileDialog::getOpenFileName(this, tr("Select a file"), QDir::currentPath(),
+                                              tr("ELF/DOL (*.elf *.dol)"));
+  if (path.isNull())
+  {
+    return;
+  }
+
+  std::unique_ptr<BootExecutableReader> reader;
+
+  std::string stdPath = path.toStdString();
+  std::string folder_path;
+  std::string extension;
+  SplitPath(stdPath, &folder_path, nullptr, &extension);
+  Common::ToLower(&extension);
+
+  if (extension == ".elf")
+  {
+    reader = std::make_unique<ElfReader>(stdPath);
+  }
+  else if (extension == ".dol")
+  {
+    reader = std::make_unique<DolReader>(stdPath);
+  }
+  else
+  {
+    ModalMessageBox::critical(this, tr("Error"), tr("Unrecognised file type."));
+    return;
+  }
+
+  AddressSpace::Accessors* accessors = AddressSpace::GetAccessors(m_memory_view->GetAddressSpace());
+
+  const Core::CPUThreadGuard guard(m_system);
+
+  if (reader->LoadIntoMemory(m_system)) {
+
+  } else {
+    ModalMessageBox::critical(this, tr("Error"), tr("Unable to load file."));
+  }
 
   Update();
 }
