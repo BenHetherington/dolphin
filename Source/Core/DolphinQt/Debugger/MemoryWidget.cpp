@@ -757,7 +757,7 @@ void MemoryWidget::OnSetValueFromFile()
     return;
   }
 
-  QString path = QFileDialog::getOpenFileName(this, tr("Select a file"), QDir::currentPath(),
+  QString path = QFileDialog::getOpenFileName(this, tr("Select a file"), QString(),
                                               tr("All files (*)"));
   if (path.isNull())
   {
@@ -794,7 +794,7 @@ void MemoryWidget::OnLoadDolElfFile() {
   if (!Core::IsRunning(m_system))
     return;
 
-  QString path = QFileDialog::getOpenFileName(this, tr("Select a file"), QDir::currentPath(),
+  QString path = QFileDialog::getOpenFileName(this, tr("Select a file"), QString(),
                                               tr("ELF/DOL (*.elf *.dol)"));
   if (path.isNull())
   {
