@@ -26,8 +26,8 @@ namespace
 class GekkoIRPlugin : public ParsePlugin
 {
 public:
-  GekkoIRPlugin(GekkoIR& result, u32 base_addr)
-      : m_output_result(result), m_active_var(nullptr), m_operand_scan_begin(0)
+  GekkoIRPlugin(GekkoIR& result, u32 base_addr, std::map<std::string, u64, std::less<>> constants)
+      : m_output_result(result), m_active_var(nullptr), m_operand_scan_begin(0), m_constants(std::move(constants))
   {
     m_active_block = &m_output_result.blocks.emplace_back(base_addr);
   }
@@ -815,10 +815,10 @@ u32 IRBlock::BlockEndAddress() const
                          });
 }
 
-FailureOr<GekkoIR> ParseToIR(std::string_view assembly, u32 base_virtual_address)
+FailureOr<GekkoIR> ParseToIR(std::string_view assembly, u32 base_virtual_address, std::map<std::string, u64, std::less<>> constants)
 {
   GekkoIR ret;
-  GekkoIRPlugin plugin(ret, base_virtual_address);
+  GekkoIRPlugin plugin(ret, base_virtual_address, std::move(constants));
 
   ParseWithPlugin(&plugin, assembly);
 

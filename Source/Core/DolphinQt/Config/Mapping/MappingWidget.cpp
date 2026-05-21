@@ -3,7 +3,7 @@
 
 #include "DolphinQt/Config/Mapping/MappingWidget.h"
 
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <QCheckBox>
 #include <QDialogButtonBox>

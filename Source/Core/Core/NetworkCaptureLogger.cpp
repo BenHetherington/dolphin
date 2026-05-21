@@ -80,9 +80,10 @@ NetworkCaptureType BinarySSLCaptureLogger::GetCaptureType() const
 
 PCAPSSLCaptureLogger::PCAPSSLCaptureLogger()
 {
+  const std::time_t time = std::time(nullptr);
   const std::string filepath =
       fmt::format("{}{} {:%Y-%m-%d %Hh%Mm%Ss}.pcap", File::GetUserPath(D_DUMPSSL_IDX),
-                  SConfig::GetInstance().GetGameID(), fmt::localtime(std::time(nullptr)));
+                  SConfig::GetInstance().GetGameID(), *std::localtime(&time));
   m_file = std::make_unique<Common::PCAP>(
       new File::IOFile(filepath, "wb", File::SharedAccess::Read), Common::PCAP::LinkType::Ethernet);
 }

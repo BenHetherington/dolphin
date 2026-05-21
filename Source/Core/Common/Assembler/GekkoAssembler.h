@@ -4,6 +4,7 @@
 #pragma once
 
 #include <string_view>
+#include <map>
 #include <vector>
 
 #include "Common/Assembler/AssemblerShared.h"
@@ -25,5 +26,5 @@ struct CodeBlock
 // Supports the full Gekko ISA, as well as the extended mnemonics defined by the book "PowerPC
 // Microprocessor Family: The Programming Environments" The input assembly is fully parsed and
 // assembled with a base address specified by the base_virtual_address
-FailureOr<std::vector<CodeBlock>> Assemble(std::string_view assembly, u32 base_virtual_address);
+FailureOr<std::vector<CodeBlock>> Assemble(std::string_view assembly, u32 base_virtual_address, std::map<std::string, u64, std::less<>> constants = {});
 }  // namespace Common::GekkoAssembler

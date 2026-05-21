@@ -4,6 +4,7 @@
 #pragma once
 
 #include <string_view>
+#include <map>
 #include <vector>
 
 #include "Common/Assembler/AssemblerShared.h"
@@ -46,5 +47,5 @@ struct GekkoIR
   std::vector<Tagged<Interval, u32>> operand_pool;
 };
 
-FailureOr<GekkoIR> ParseToIR(std::string_view assembly, u32 base_virtual_address);
+FailureOr<GekkoIR> ParseToIR(std::string_view assembly, u32 base_virtual_address, std::map<std::string, u64, std::less<>> constants);
 }  // namespace Common::GekkoAssembler::detail

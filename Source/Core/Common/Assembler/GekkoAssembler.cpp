@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <array>
 #include <string>
+#include <map>
 #include <vector>
 
 #include <fmt/format.h>
@@ -115,10 +116,11 @@ void CodeBlock::PushBigEndian(u32 val)
 }
 
 FailureOr<std::vector<CodeBlock>> Assemble(std::string_view instruction,
-                                           u32 current_instruction_address)
+                                           u32 current_instruction_address,
+                                           std::map<std::string, u64, std::less<>> constants)
 {
   FailureOr<detail::GekkoIR> parse_result =
-      detail::ParseToIR(instruction, current_instruction_address);
+      detail::ParseToIR(instruction, current_instruction_address, std::move(constants));
   if (IsFailure(parse_result))
   {
     return GetFailure(parse_result);

@@ -31,7 +31,7 @@
 #endif
 
 #ifndef _WIN32
-#include <qpa/qplatformnativeinterface.h>
+//#include <qpa/qplatformnativeinterface.h>
 #endif
 
 #include "Common/ScopeGuard.h"

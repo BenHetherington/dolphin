@@ -86,7 +86,7 @@ void AssembleInstructionDialog::OnEditChanged()
   std::string line = m_input_edit->text().toStdString();
   Common::ToLower(&line);
 
-  FailureOr<std::vector<CodeBlock>> asm_result = Assemble(line, m_address);
+  FailureOr<std::vector<CodeBlock>> asm_result = Assemble(line, m_address/*, constants*/);
 
   if (IsFailure(asm_result))
   {
